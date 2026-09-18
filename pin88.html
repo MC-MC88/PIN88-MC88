@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f4ee">
+<title>Pin88 - Neo Brutalism</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23a67cda' stroke='%231a1a1a' stroke-width='2'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='14' font-weight='bold' fill='%231a1a1a' text-anchor='middle'%3EP88%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===== NEO-BRUTALISM THEMES ===== */
+:root, [data-theme="1"] {
+  --bg-color: #f4f4ee;
+  --card-color: #ffffff;
+  --border-color: #1a1a1a;
+  --shadow-color: #1a1a1a;
+  --text-color: #1a1a1a;
+  --text-muted: #666666;
+  
+  --accent-purple: #a67cda;
+  --accent-lime: #d6f32f;
+  --accent-yellow: #fbd24c;
+  --accent-pink: #ff8b8b;
+  --accent-blue: #7bc4ff;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+  
+  --border-size: 3px;
+  --shadow-offset: 5px;
+  --shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-color);
+  --shadow-sm: 3px 3px 0 var(--shadow-color);
+}
+
+[data-theme="2"] {
+  --bg-color: #e8f4f8;
+  --accent-purple: #4a90e2;
+  --accent-lime: #f5a623;
+  --accent-yellow: #f8e71c;
+  --accent-pink: #ff5c5c;
+  --accent-blue: #50e3c2;
+}
+
+/* ===== RESET & BASE ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { min-height: 100%; }
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  padding: 20px 16px 140px;
+  overflow-x: hidden;
+  transition: background 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  /* تم إزالة opacity: 0 لضمان ظهور الصفحة دائماً */
+}
+
+/* ===== SPLASH SCREEN ===== */
+#splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #a67cda; /* لون احتياطي في حال فشل المتغيرات */
+  background: var(--accent-purple, #a67cda);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+}
+#splash.hide { opacity: 0; pointer-events: none; }
+
+.splash-content {
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  box-shadow: 8px 8px 0 var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 340px;
+  width: 90%;
+  text-align: center;
+}
+.splash-logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-color);
+  letter-spacing: 0.05em;
+}
+.splash-sub {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: 0.1em;
+}
+.splash-progress {
+  width: 100%;
+  height: 20px;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+.splash-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent-lime);
+  transition: width 0.1s linear;
+  border-right: var(--border-size) solid var(--border-color);
+}
+.splash-pct {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-color);
+}
+.splash-skip {
+  position: absolute;
+  bottom: 30px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  background: var(--card-color);
+  padding: 8px 16px;
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.splash-skip:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--border-color);
+}
+
+/* ===== LAYOUT ===== */
+.app { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+.logo { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.logo-mark {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-yellow);
+  border: var(--border-size) solid var(--border-color);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.logo-mark svg { width: 22px; height: 22px; color: var(--text-color); }
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon-btn {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.icon-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--border-color); }
+.icon-btn svg { width: 22px; height: 22px; stroke-width: 2.5; }
+
+/* ===== SEARCH ===== */
+.search-wrap { position: relative; margin-bottom: 20px; }
+.search-wrap > svg {
+  position: absolute;
+  left: 18px; top: 50%;
+  transform: translateY(-50%);
+  width: 20px; height: 20px;
+  color: var(--text-color);
+  pointer-events: none;
+  stroke-width: 2.5;
+}
+.search-input {
+  width: 100%;
+  padding: 16px 18px 16px 52px;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: all 0.1s;
+}
+.search-input::placeholder { color: var(--text-muted); font-weight: 500; }
+.search-input:focus {
+  outline: none;
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--border-color);
+}
+
+/* ===== FOLDERS ===== */
+.folders-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding: 4px 4px 10px;
+  scrollbar-width: none;
+}
+.folders-nav::-webkit-scrollbar { display: none; }
+.folder-tab {
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  color: var(--text-color);
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+.folder-tab:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--border-color);
+}
+.folder-tab.active {
+  background: var(--accent-purple);
+  color: #fff;
+}
+.folder-tab .count {
+  font-size: 0.75rem;
+  background: var(--border-color);
+  color: var(--card-color);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+}
+.folder-tab.active .count { background: rgba(0,0,0,0.2); color: #fff; }
+.folder-tab.add { border-style: dashed; }
+.folder-tab.add:active { border-style: solid; }
+
+/* ===== BOOKMARKS GRID ===== */
+.bookmarks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+.bookmark {
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px 12px 16px;
+  cursor: pointer;
+  transition: all 0.1s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-color);
+  box-shadow: var(--shadow);
+  min-height: 140px;
+  justify-content: center;
+}
+.bookmark:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--border-color);
+}
+
+.bookmark .icon {
+  width: 60px; height: 60px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-yellow);
+  border: var(--border-size) solid var(--border-color);
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.bookmark .icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bookmark .icon svg { width: 28px; height: 28px; color: var(--text-color); stroke-width: 2; }
+
+.bookmark .title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.bookmark .actions {
+  position: absolute;
+  top: 10px; right: 10px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.bookmark:hover .actions { opacity: 1; transform: translateY(0); }
+.bookmark .actions button {
+  width: 32px; height: 32px;
+  background: var(--card-color);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s;
+  box-shadow: 2px 2px 0 var(--border-color);
+}
+.bookmark .actions button:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--border-color); }
+.bookmark .actions button svg { width: 14px; height: 14px; stroke-width: 2.5; }
+.bookmark .actions button[data-action="delete"] { background: var(--accent-pink); }
+
+/* ===== EMPTY STATE ===== */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-color);
+  display: none;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-top: 20px;
+}
+.empty.show { display: block; }
+.empty svg { width: 60px; height: 60px; margin-bottom: 16px; opacity: 0.8; stroke-width: 2; }
+.empty h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+.empty p { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); }
+
+/* ===== BOTTOM DOCK (BUBBLE MENU) ===== */
+.bubble-menu {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0 var(--border-color);
+  z-index: 50;
+}
+.bubble-item {
+  width: 54px; height: 54px;
+  border-radius: var(--radius-md);
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+  padding: 0;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.bubble-item svg { width: 24px; height: 24px; stroke-width: 2.5; transition: transform 0.1s; }
+.bubble-item:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--border-color); }
+.bubble-item.primary {
+  width: 54px; height: 54px;
+  background: var(--accent-purple);
+  color: #fff;
+  margin: 0;
+}
+.bubble-item.primary svg { width: 28px; height: 28px; stroke-width: 3; }
+
+/* Specific colors for Dock buttons like the image */
+#btnImport { background: var(--accent-lime); }
+#btnShare { background: var(--accent-yellow); }
+#btnAdd { background: var(--accent-purple); color: #fff; }
+#btnTheme { background: var(--accent-pink); }
+#btnExport { background: var(--accent-blue); }
+
+/* ===== MODALS (Neo-Brutalism Style) ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 100;
+}
+.modal-backdrop.open { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 8px 8px 0 var(--border-color);
+  animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* The purple info box from the image */
+.modal-info-box {
+  background: var(--accent-purple);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  color: #fff;
+}
+.modal-info-box h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+.modal-info-box p { font-size: 0.9rem; font-weight: 600; }
+
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+.field input[type="text"],
+.field input[type="url"],
+.field select {
+  width: 100%;
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  color: var(--text-color);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.1s;
+}
+.field input:focus, .field select:focus {
+  outline: none;
+  background: #f9f9f9;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--border-color);
+}
+.field input::placeholder { color: var(--text-muted); font-weight: 500; }
+
+.image-uploader { display: flex; align-items: center; gap: 14px; }
+.image-preview {
+  width: 70px; height: 70px;
+  border-radius: var(--radius-md);
+  background: var(--card-color);
+  border: var(--border-size) dashed var(--border-color);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: var(--text-color);
+}
+.image-preview img { width: 100%; height: 100%; object-fit: cover; }
+.image-preview svg { width: 28px; height: 28px; stroke-width: 2; }
+.image-uploader-actions { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--accent-yellow);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.1s;
+}
+.upload-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--border-color); }
+.upload-btn svg { width: 16px; height: 16px; stroke-width: 2.5; }
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition: all 0.1s;
+  border: var(--border-size) solid var(--border-color);
+  background: var(--card-color);
+  color: var(--text-color);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--border-color); }
+.btn.primary {
+  background: var(--accent-lime);
+}
+.btn.danger {
+  background: var(--accent-pink);
+}
+
+.share-info {
+  background: var(--accent-purple);
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.share-info strong { font-weight: 800; }
+.share-info .row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.share-info .row:last-child { margin-bottom: 0; }
+.share-hint {
+  font-size: 0.85rem;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px dashed rgba(0,0,0,0.2);
+  line-height: 1.5;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--card-color);
+  border: var(--border-size) solid var(--border-color);
+  color: var(--text-color);
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: var(--shadow);
+  max-width: 90vw;
+  text-align: center;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  padding: 16px 0;
+}
+.footer a { color: var(--accent-purple); text-decoration: none; font-weight: 800; }
+.footer a:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  body { padding: 14px 12px 130px; }
+  .header { padding: 10px 14px; }
+  .logo-text { font-size: 1rem; }
+  .logo-mark { width: 38px; height: 38px; }
+  .bookmarks { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+  .bookmark { padding: 16px 10px 12px; min-height: 120px; }
+  .bookmark .icon { width: 50px; height: 50px; }
+  .bookmark .title { font-size: 0.8rem; }
+  .bubble-menu { bottom: 14px; padding: 8px; gap: 8px; }
+  .bubble-item { width: 48px; height: 48px; }
+  .bubble-item svg { width: 20px; height: 20px; }
+  .modal { padding: 20px; }
+  .modal h2 { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH ===== -->
+<div id="splash">
+  <div class="splash-content">
+    <div class="splash-logo">PIN88</div>
+    <div class="splash-sub">LOADING SYSTEM</div>
+    <div class="splash-progress"><div class="splash-progress-fill" id="progFill"></div></div>
+    <div class="splash-pct" id="progPct">0%</div>
+  </div>
+  <div class="splash-skip" id="splashSkip">SKIP</div>
+</div>
+
+<div class="app" id="app">
+
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <span class="logo-text">PIN88</span>
+    </div>
+    <button class="icon-btn" id="btnSettings" title="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </header>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" class="search-input" id="searchInput" placeholder="Search bookmarks...">
+  </div>
+
+  <div class="folders-nav" id="foldersNav"></div>
+  <div class="bookmarks" id="bookmarksGrid"></div>
+
+  <div class="empty" id="emptyState">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+    </svg>
+    <h3>NO BOOKMARKS</h3>
+    <p>Press the + button to add your first one</p>
+  </div>
+
+  <div class="footer">
+    © <a href="mailto:mohamed005cheikh@gmail.com">mohamed005cheikh@gmail.com</a> | by MC88
+  </div>
+</div>
+
+<!-- ===== BUBBLE MENU (DOCK) ===== -->
+<nav class="bubble-menu">
+  <button class="bubble-item" id="btnImport" aria-label="Import">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+  </button>
+
+  <button class="bubble-item" id="btnShare" aria-label="Share">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+  </button>
+
+  <button class="bubble-item primary" id="btnAdd" aria-label="Add">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </button>
+
+  <button class="bubble-item" id="btnTheme" aria-label="Theme">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+    </svg>
+  </button>
+
+  <button class="bubble-item" id="btnExport" aria-label="Export">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- ===== BOOKMARK MODAL ===== -->
+<div class="modal-backdrop" id="bookmarkModal">
+  <div class="modal">
+    <h2 id="bookmarkModalTitle">ADD BOOKMARK</h2>
+
+    <div class="field">
+      <label>URL</label>
+      <input type="url" id="bmUrl" placeholder="https://example.com" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="bmTitle" placeholder="Auto-filled from URL" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Folder</label>
+      <select id="bmFolder"></select>
+    </div>
+
+    <div class="field">
+      <label>Icon</label>
+      <div class="image-uploader">
+        <div class="image-preview" id="bmPreview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <div class="image-uploader-actions">
+          <label class="upload-btn" for="bmImageInput">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            UPLOAD
+          </label>
+          <input type="file" id="bmImageInput" accept="image/*" hidden>
+          <button class="upload-btn" id="bmImageClear" type="button" style="background:var(--accent-pink);">REMOVE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" id="bmCancel">CANCEL</button>
+      <button class="btn primary" id="bmSave">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOLDER MODAL ===== -->
+<div class="modal-backdrop" id="folderModal">
+  <div class="modal">
+    <h2>NEW FOLDER</h2>
+    <div class="field">
+      <label>Folder name</label>
+      <input type="text" id="folderName" placeholder="e.g. Work" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="folderCancel">CANCEL</button>
+      <button class="btn primary" id="folderSave">CREATE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHARE MODAL ===== -->
+<div class="modal-backdrop" id="shareModal">
+  <div class="modal">
+    <h2 id="shareTitle">SHARE FOLDER</h2>
+    <div class="share-info" id="shareInfo"></div>
+    <div class="modal-actions" style="justify-content:space-between;">
+      <button class="btn" id="shareClose">CLOSE</button>
+      <button class="btn primary" id="shareDownload">DOWNLOAD</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>SETTINGS</h2>
+    <div class="field">
+      <label>Danger zone</label>
+      <button class="btn danger" id="clearAllBtn" style="width:100%;margin-top:6px;">DELETE ALL DATA</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="settingsClose">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   PIN88 — Neo-Brutalism Edition
+   ========================================================= */
+
+const STORAGE_KEY = 'pin88_data_v1';
+const THEME_KEY = 'pin88_theme_v1';
+
+const state = { bookmarks: [], folders: [], currentFolder: 'all' };
+let editingBookmarkId = null;
+let pendingImageData = null;
+let shareTargetId = null;
+
+/* ===== Utils ===== */
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+function getHostname(url) {
+  try { return new URL(url).hostname.replace('www.', ''); }
+  catch { return url; }
+}
+
+function getFavicon(url) {
+  try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`; }
+  catch { return null; }
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+/* ===== Storage ===== */
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      state.bookmarks = d.bookmarks || [];
+      state.folders = d.folders || [];
+    }
+  } catch (e) { console.error(e); }
+  if (state.folders.length === 0) state.folders.push({ id: uid(), name: 'General' });
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      bookmarks: state.bookmarks,
+      folders: state.folders,
+    }));
+  } catch (e) { toast('Storage full'); }
+}
+
+function loadTheme() {
+  const t = localStorage.getItem(THEME_KEY) || '1';
+  document.documentElement.setAttribute('data-theme', t);
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || '1';
+  const next = cur === '1' ? '2' : '1';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem(THEME_KEY, next);
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', next === '1' ? '#f4f4ee' : '#e8f4f8');
+}
+
+/* ===== Image ===== */
+function resizeImage(file, maxSize = 128) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        const ratio = Math.min(maxSize / width, maxSize / height, 1);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ===== Render ===== */
+function render() { renderFolders(); renderBookmarks(); }
+
+function renderFolders() {
+  const nav = document.getElementById('foldersNav');
+  const total = state.bookmarks.length;
+  let html = `<button class="folder-tab ${state.currentFolder === 'all' ? 'active' : ''}" data-folder="all">All <span class="count">${total}</span></button>`;
+
+  for (const f of state.folders) {
+    const count = state.bookmarks.filter(b => b.folderId === f.id).length;
+    const active = state.currentFolder === f.id ? 'active' : '';
+    html += `<button class="folder-tab ${active}" data-folder="${f.id}">${escapeHtml(f.name)} <span class="count">${count}</span></button>`;
+  }
+  html += `<button class="folder-tab add" id="btnAddFolder">+ Folder</button>`;
+  nav.innerHTML = html;
+
+  nav.querySelectorAll('[data-folder]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.currentFolder = btn.dataset.folder;
+      render();
+    });
+  });
+  document.getElementById('btnAddFolder').addEventListener('click', openFolderModal);
+}
+
+function renderBookmarks() {
+  const grid = document.getElementById('bookmarksGrid');
+  const empty = document.getElementById('emptyState');
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+
+  let list = state.bookmarks.slice();
+  if (state.currentFolder !== 'all') list = list.filter(b => b.folderId === state.currentFolder);
+  if (q) list = list.filter(b => b.title.toLowerCase().includes(q) || b.url.toLowerCase().includes(q));
+
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+
+  grid.innerHTML = list.map(b => {
+    let iconHtml;
+    if (b.image) iconHtml = `<img src="${b.image}" alt="">`;
+    else {
+      const fav = getFavicon(b.url);
+      iconHtml = fav
+        ? `<img src="${fav}" alt="" onerror="this.style.display='none'">`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
+    }
+    return `
+      <a class="bookmark" href="${escapeHtml(b.url)}" target="_blank" rel="noopener" data-id="${b.id}">
+        <div class="actions">
+          <button title="Edit" data-action="edit" data-id="${b.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button title="Delete" data-action="delete" data-id="${b.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="icon">${iconHtml}</div>
+        <div class="title">${escapeHtml(b.title)}</div>
+      </a>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      if (btn.dataset.action === 'edit') editBookmark(id);
+      if (btn.dataset.action === 'delete') deleteBookmark(id);
+    });
+  });
+}
+
+/* ===== Bookmark modal ===== */
+function openBookmarkModal() {
+  editingBookmarkId = null;
+  pendingImageData = null;
+  document.getElementById('bookmarkModalTitle').textContent = 'ADD BOOKMARK';
+  document.getElementById('bmUrl').value = '';
+  document.getElementById('bmTitle').value = '';
+  document.getElementById('bmImageInput').value = '';
+  renderPreview(null);
+  fillFolderSelect();
+  document.getElementById('bookmarkModal').classList.add('open');
+  setTimeout(() => document.getElementById('bmUrl').focus(), 100);
+}
+
+function editBookmark(id) {
+  const b = state.bookmarks.find(x => x.id === id);
+  if (!b) return;
+  editingBookmarkId = id;
+  pendingImageData = b.image || null;
+  document.getElementById('bookmarkModalTitle').textContent = 'EDIT BOOKMARK';
+  document.getElementById('bmUrl').value = b.url;
+  document.getElementById('bmTitle').value = b.title;
+  renderPreview(pendingImageData);
+  fillFolderSelect(b.folderId);
+  document.getElementById('bookmarkModal').classList.add('open');
+}
+
+function renderPreview(dataUrl) {
+  const el = document.getElementById('bmPreview');
+  if (dataUrl) el.innerHTML = `<img src="${dataUrl}" alt="">`;
+  else el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+}
+
+function fillFolderSelect(selectedId) {
+  const sel = document.getElementById('bmFolder');
+  sel.innerHTML = state.folders.map(f =>
+    `<option value="${f.id}" ${f.id === selectedId ? 'selected' : ''}>${escapeHtml(f.name)}</option>`
+  ).join('');
+  if (!selectedId && state.folders[0]) sel.value = state.folders[0].id;
+}
+
+function saveBookmark() {
+  const url = document.getElementById('bmUrl').value.trim();
+  let title = document.getElementById('bmTitle').value.trim();
+  const folderId = document.getElementById('bmFolder').value;
+
+  if (!url) { toast('URL required'); return; }
+  let norm = url;
+  if (!/^https?:\/\//i.test(url)) norm = 'https://' + url;
+  if (!title) title = getHostname(norm);
+
+  if (editingBookmarkId) {
+    const b = state.bookmarks.find(x => x.id === editingBookmarkId);
+    if (b) Object.assign(b, { url: norm, title, folderId, image: pendingImageData });
+    save(); render(); closeModals(); toast('Updated');
+  } else {
+    state.bookmarks.push({
+      id: uid(), url: norm, title, folderId, image: pendingImageData, createdAt: Date.now(),
+    });
+    save(); render(); closeModals(); toast('Added');
+  }
+}
+
+function deleteBookmark(id) {
+  if (!confirm('Delete this bookmark?')) return;
+  state.bookmarks = state.bookmarks.filter(b => b.id !== id);
+  save(); render(); toast('Deleted');
+}
+
+/* ===== Folder modal ===== */
+function openFolderModal() {
+  document.getElementById('folderName').value = '';
+  document.getElementById('folderModal').classList.add('open');
+  setTimeout(() => document.getElementById('folderName').focus(), 100);
+}
+
+function saveFolder() {
+  const name = document.getElementById('folderName').value.trim();
+  if (!name) { toast('Name required'); return; }
+  state.folders.push({ id: uid(), name });
+  save(); render(); closeModals(); toast('Folder created');
+}
+
+/* ===== Share folder (download JSON) ===== */
+function openShareModal(folderId) {
+  let target = folderId || state.currentFolder;
+  if (target === 'all') {
+    toast('Open a folder first');
+    return;
+  }
+  const folder = state.folders.find(f => f.id === target);
+  if (!folder) return;
+
+  shareTargetId = folder.id;
+
+  const bookmarks = state.bookmarks.filter(b => b.folderId === folder.id);
+  const payload = buildSharePayload(folder.name, bookmarks);
+  const size = new Blob([JSON.stringify(payload)]).size;
+
+  document.getElementById('shareTitle').textContent = 'SHARE: ' + folder.name.toUpperCase();
+  document.getElementById('shareInfo').innerHTML = `
+    <div class="row"><span>Folder</span><strong>${escapeHtml(folder.name)}</strong></div>
+    <div class="row"><span>Bookmarks</span><strong>${bookmarks.length}</strong></div>
+    <div class="row"><span>File size</span><strong>~${formatBytes(size)}</strong></div>
+    <div class="share-hint">
+      Download this file and send it to anyone.<br>
+      They open Pin88 &rarr; Import &rarr; select the file &rarr; folder appears instantly.
+    </div>
+  `;
+
+  document.getElementById('shareModal').classList.add('open');
+}
+
+function buildSharePayload(name, bookmarks) {
+  return {
+    app: 'Pin88',
+    version: 1,
+    type: 'folder',
+    name: name,
+    exportedAt: new Date().toISOString(),
+    bookmarks: bookmarks.map(b => ({
+      url: b.url,
+      title: b.title,
+      image: b.image || null,
+    })),
+  };
+}
+
+function downloadShareFile() {
+  const folder = state.folders.find(f => f.id === shareTargetId);
+  if (!folder) return;
+  const bookmarks = state.bookmarks.filter(b => b.folderId === folder.id);
+  const payload = buildSharePayload(folder.name, bookmarks);
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `pin88-${folder.name.replace(/[^\w\u0600-\u06FF-]+/g, '-').toLowerCase()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Folder downloaded');
+  closeModals();
+}
+
+/* ===== Import ===== */
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (data.app === 'Pin88' && data.type === 'folder' && Array.isArray(data.bookmarks)) {
+          importSharedFolder(data);
+          return;
+        }
+        if (Array.isArray(data.bookmarks) && Array.isArray(data.folders)) {
+          importFullBackup(data);
+          return;
+        }
+        toast('Invalid file');
+      } catch (err) {
+        console.error(err);
+        toast('Invalid file');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function importSharedFolder(data) {
+  const count = data.bookmarks.length;
+  if (!confirm(`Import folder "${data.name}" with ${count} bookmark(s)?`)) return;
+
+  let folderName = data.name || 'Shared';
+  let folderId;
+  const existing = state.folders.find(f => f.name === folderName);
+  if (existing) folderId = existing.id;
+  else { folderId = uid(); state.folders.push({ id: folderId, name: folderName }); }
+
+  let added = 0, skipped = 0;
+  for (const b of data.bookmarks) {
+    if (!b.url) continue;
+    if (state.bookmarks.some(x => x.url === b.url)) { skipped++; continue; }
+    state.bookmarks.push({
+      id: uid(),
+      url: b.url,
+      title: b.title || getHostname(b.url),
+      folderId,
+      image: b.image || null,
+      createdAt: Date.now(),
+    });
+    added++;
+  }
+  save(); render();
+  toast(`Imported ${added}${skipped ? ` (${skipped} skipped)` : ''}`);
+}
+
+function importFullBackup(data) {
+  const count = data.bookmarks.length;
+  if (!confirm(`Merge ${count} bookmark(s) from backup?`)) return;
+
+  const names = new Set(state.folders.map(f => f.name));
+  const map = {};
+  for (const f of data.folders) {
+    if (names.has(f.name)) {
+      map[f.id] = state.folders.find(x => x.name === f.name).id;
+    } else {
+      const nid = uid();
+      state.folders.push({ id: nid, name: f.name });
+      map[f.id] = nid; names.add(f.name);
+    }
+  }
+  let added = 0;
+  for (const b of data.bookmarks) {
+    if (state.bookmarks.some(x => x.url === b.url)) continue;
+    state.bookmarks.push({ ...b, id: uid(), folderId: map[b.folderId] || state.folders[0].id });
+    added++;
+  }
+  save(); render();
+  toast(`Imported ${added}`);
+}
+
+/* ===== Export all ===== */
+function exportAll() {
+  const data = {
+    app: 'Pin88',
+    version: 1,
+    type: 'backup',
+    exportedAt: new Date().toISOString(),
+    bookmarks: state.bookmarks,
+    folders: state.folders,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `pin88-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Backup exported');
+}
+
+function clearAll() {
+  if (!confirm('Delete ALL data?')) return;
+  if (!confirm('Really sure?')) return;
+  state.bookmarks = [];
+  state.folders = [{ id: uid(), name: 'General' }];
+  state.currentFolder = 'all';
+  save(); render(); closeModals(); toast('All deleted');
+}
+
+function closeModals() {
+  document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
+}
+
+/* ===== Splash ===== */
+function initSplash() {
+  const splash = document.getElementById('splash');
+  const progFill = document.getElementById('progFill');
+  const progPct = document.getElementById('progPct');
+  const skip = document.getElementById('splashSkip');
+
+  // ⏱️ مدة التحميل: 10 ثوانٍ (10000 مللي ثانية)
+  const DURATION = 10000; 
+  
+  const start = performance.now();
+  let finished = false;
+
+  function updateProgress(now) {
+    if (finished) return;
+    const elapsed = now - start;
+    const pct = Math.min(100, (elapsed / DURATION) * 100);
+    progFill.style.width = pct + '%';
+    progPct.textContent = Math.floor(pct) + '%';
+
+    if (elapsed >= DURATION) {
+      finish();
+    } else {
+      requestAnimationFrame(updateProgress);
+    }
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    splash.classList.add('hide');
+    // إزالة شاشة التحميل من الصفحة تماماً بعد انتهاء تأثير التلاشي
+    setTimeout(() => splash.remove(), 600);
+  }
+
+  skip.addEventListener('click', finish);
+  splash.addEventListener('click', finish);
+  document.addEventListener('keydown', finish, { once: true });
+
+  requestAnimationFrame(updateProgress);
+}
+
+/* ===== Events ===== */
+document.getElementById('btnAdd').addEventListener('click', openBookmarkModal);
+document.getElementById('btnImport').addEventListener('click', importData);
+document.getElementById('btnExport').addEventListener('click', exportAll);
+document.getElementById('btnShare').addEventListener('click', () => openShareModal(state.currentFolder));
+document.getElementById('btnTheme').addEventListener('click', toggleTheme);
+document.getElementById('btnSettings').addEventListener('click', () => {
+  document.getElementById('settingsModal').classList.add('open');
+});
+
+document.getElementById('bmCancel').addEventListener('click', closeModals);
+document.getElementById('bmSave').addEventListener('click', saveBookmark);
+document.getElementById('bmImageInput').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try { pendingImageData = await resizeImage(f, 128); renderPreview(pendingImageData); }
+  catch { toast('Image failed'); }
+});
+document.getElementById('bmImageClear').addEventListener('click', () => {
+  pendingImageData = null;
+  document.getElementById('bmImageInput').value = '';
+  renderPreview(null);
+});
+
+document.getElementById('folderCancel').addEventListener('click', closeModals);
+document.getElementById('folderSave').addEventListener('click', saveFolder);
+document.getElementById('shareClose').addEventListener('click', closeModals);
+document.getElementById('shareDownload').addEventListener('click', downloadShareFile);
+document.getElementById('settingsClose').addEventListener('click', closeModals);
+document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+
+document.getElementById('searchInput').addEventListener('input', renderBookmarks);
+
+document.querySelectorAll('.modal-backdrop').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) closeModals(); });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModals();
+  if (e.key === 'Enter') {
+    if (document.getElementById('bookmarkModal').classList.contains('open')) saveBookmark();
+    else if (document.getElementById('folderModal').classList.contains('open')) saveFolder();
+  }
+});
+
+/* ===== Init ===== */
+loadTheme();
+load();
+render();
+initSplash();
+
+/* ===== Service Worker (PWA) ===== */
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    self.addEventListener('install', e => self.skipWaiting());
+    self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+    self.addEventListener('fetch', e => {
+      if (e.request.method !== 'GET') return;
+      e.respondWith(
+        caches.open('pin88-v4').then(cache =>
+          fetch(e.request).then(res => {
+            if (res.ok && e.request.url.startsWith(self.location.origin)) cache.put(e.request, res.clone());
+            return res;
+          }).catch(() => cache.match(e.request))
+        )
+      );
+    });
+  `;
+  try {
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(() => {});
+  } catch {}
+}
+</script>
+</body>
+</html>
