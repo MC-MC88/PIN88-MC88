@@ -59,7 +59,7 @@ body {
   overflow-x: hidden;
   transition: background 0.3s ease;
   -webkit-font-smoothing: antialiased;
-  /* تم إزالة opacity: 0 لضمان ظهور الصفحة دائماً */
+  /*  */
 }
 
 /* ===== SPLASH SCREEN ===== */
@@ -69,7 +69,7 @@ body {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: #a67cda; /* لون احتياطي في حال فشل المتغيرات */
+  background: #a67cda; /* */
   background: var(--accent-purple, #a67cda);
   z-index: 9999;
   display: flex;
@@ -1278,7 +1278,7 @@ function initSplash() {
   const progPct = document.getElementById('progPct');
   const skip = document.getElementById('splashSkip');
 
-  // ⏱️ مدة التحميل: 10 ثوانٍ (10000 مللي ثانية)
+  // ⏱️ 
   const DURATION = 10000; 
   
   const start = performance.now();
@@ -1302,7 +1302,7 @@ function initSplash() {
     if (finished) return;
     finished = true;
     splash.classList.add('hide');
-    // إزالة شاشة التحميل من الصفحة تماماً بعد انتهاء تأثير التلاشي
+    // 
     setTimeout(() => splash.remove(), 600);
   }
 
